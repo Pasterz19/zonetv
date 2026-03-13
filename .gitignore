@@ -1,28 +1,13 @@
-# dependencies
 node_modules
-.pnp
-.pnp.js
-
-# next.js
-.next/
-out/
-
-# production
+.next
+out
 build
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-dev.log
-
-# local env files
-.env*.local
+dist
 .env
-
-# vercel
-.vercel
-
-# typescript
+.env*.local
+*.log
+dev.log
+.DS_Store
 *.tsbuildinfo
 next-env.d.ts
+src/generated/prisma

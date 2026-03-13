@@ -1,6 +1,5 @@
 name: Auto Pack Extension
 
-# Uruchom ten skrypt przy każdym pushu do gałęzi main
 on:
   push:
     branches: [ "main" ]
@@ -10,25 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Pobranie kodu z repozytorium
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Instalacja narzędzia do pakowania (opcjonalne, używamy wbudowanego zip)
-      # W przypadku prostych rozszerzeń bez budowania (npm build) wystarczy standardowe zip.
+      # --- TO JEST KLUCZOWE DLA TWOJEGO PROJEKTU ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      # 3. Utworzenie pliku ZIP z rozszerzeniem
-      # Wykluczamy pliki niepotrzebne w wersji produkcyjnej (np. .git, workflow, readme)
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+      # -------------------------------------------
+
+      # Ważne: Tutaj musisz podać nazwę folderu, w którym powstał gotowy projekt.
+      # Zazwyczaj jest to folder 'dist' lub 'build'. Sprawdź to w swoim projekcie!
       - name: Create ZIP artifact
-        run: |
-          zip -r zonetv-extension.zip . \
-          -x ".git/*" \
-          -x ".github/*" \
-          -x "*.md" \
-          -x ".gitignore" \
-          -x "*.zip"
+        run: zip -r zonetv-extension.zip dist/  # <--- ZMIEŃ 'dist' na swój folder wynikowy!
 
-      # 4. Upload spakowanego pliku jako "artifact" (można go pobrać z poziomu Actions w GitHub)
       - name: Upload ZIP artifact
         uses: actions/upload-artifact@v4
         with:

@@ -1,0 +1,20 @@
+{
+  "node": {
+    "4083b619c58b8478262ae729b32b9a3e0771c4f5eb": {
+      "workers": {
+        "app/admin/plans/page": {
+          "moduleId": "[project]/.next-internal/server/app/admin/plans/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/admin/plans/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "src/app/admin/plans/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/plans/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "src/app/admin/plans/page.tsx"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,463 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider   = "prisma-client"
+  output     = "../src/generated/prisma"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../dev.db"
+}
+
+model User {
+  id                  String                    @id @default(cuid())
+  email               String                    @unique
+  name                String?                   @unique
+  emailVerifiedAt     DateTime?
+  passwordHash        String
+  role                UserRole                  @default(USER)
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+  subscriptions       Subscription[]
+  channelBuffers      ChannelBufferPreference[]
+  favorites           Favorite[]
+  watchHistory        WatchHistory[]
+  notifications       Notification[]
+  watchProgresses     WatchProgress[]
+  profile             UserProfile?
+  reviews             Review[]
+  payments            Payment[]
+  hostedParties       WatchParty[]              @relation("HostedParties")
+  partyParticipations WatchPartyParticipant[]
+
+  @@index([role])
+}
+
+model SubscriptionPlan {
+  id          String         @id @default(cuid())
+  name        String         @unique // Free, Silver, Gold, Live
+  price       Decimal        @default(0)
+  currency    String         @default("PLN")
+  description String?
+  features    String // JSON string of features
+  isPromoted  Boolean        @default(false)
+  tier        Int            @default(0) // 0=Free, 1=Silver, 2=Gold, 3=Live
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  users       Subscription[]
+}
+
+model Subscription {
+  id        String           @id @default(cuid())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  plan      SubscriptionPlan @relation(fields: [planId], references: [id])
+  planId    String
+  active    Boolean          @default(false)
+  startedAt DateTime         @default(now())
+  endsAt    DateTime?
+  payments  Payment[]
+
+  @@index([userId])
+  @@index([planId])
+  @@index([endsAt])
+}
+
+model Movie {
+  id              String          @id @default(cuid())
+  title           String
+  category        String
+  description     String
+  imageUrl        String
+  externalUrl     String
+  duration        Int? // Runtime in seconds
+  releaseYear     Int?
+  rating          Float? // Average rating (0-10)
+  isPublished     Boolean         @default(true)
+  // Video source tracking
+  sourceType      String?         @default("DIRECT") // DIRECT, SAVEFILES, M3U8, MP4
+  sourceId        String? // External ID (e.g., file_id from savefiles)
+  sourceExpiresAt DateTime? // When the URL expires
+  lastRefreshedAt DateTime? // Last time URL was refreshed
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  watchProgresses WatchProgress[]
+  tags            MovieTag[]
+  subtitles       Subtitle[]
+  reviews         Review[]
+
+  @@index([category])
+  @@index([isPublished])
+  @@index([sourceType])
+  @@index([sourceExpiresAt])
+}
+
+model Series {
+  id              String          @id @default(cuid())
+  title           String
+  category        String
+  description     String
+  imageUrl        String
+  releaseYear     Int?
+  rating          Float? // Average rating (0-10)
+  isPublished     Boolean         @default(true)
+  seasons         Season[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  watchProgresses WatchProgress[]
+  tags            SeriesTag[]
+  reviews         Review[]
+
+  @@index([category])
+  @@index([isPublished])
+}
+
+model Season {
+  id        String    @id @default(cuid())
+  series    Series    @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  seriesId  String
+  number    Int
+  episodes  Episode[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([seriesId, number])
+  @@index([seriesId])
+}
+
+model Episode {
+  id              String          @id @default(cuid())
+  season          Season          @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  seasonId        String
+  number          Int
+  title           String
+  description     String
+  imageUrl        String
+  externalUrl     String
+  duration        Int? // Runtime in seconds
+  isPublished     Boolean         @default(true)
+  // Video source tracking
+  sourceType      String?         @default("DIRECT") // DIRECT, SAVEFILES, M3U8, MP4
+  sourceId        String? // External ID (e.g., file_id from savefiles)
+  sourceExpiresAt DateTime? // When the URL expires
+  lastRefreshedAt DateTime? // Last time URL was refreshed
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  watchProgresses WatchProgress[]
+  subtitles       Subtitle[]
+
+  @@unique([seasonId, number])
+  @@index([seasonId])
+  @@index([sourceType])
+  @@index([sourceExpiresAt])
+}
+
+model Channel {
+  id          String                    @id @default(cuid())
+  name        String
+  imageUrl    String
+  streamUrl   String                    @unique // m3u8/ts or IPTV URL
+  groupTitle  String?
+  tvgId       String?
+  tvgName     String?
+  tvgLogo     String?
+  enabled     Boolean                   @default(false)
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
+  buffers     ChannelBufferPreference[]
+  epgPrograms EpgProgram[]
+
+  @@index([enabled])
+  @@index([groupTitle])
+}
+
+model EpgProgram {
+  id          String   @id @default(cuid())
+  channel     Channel  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channelId   String
+  start       DateTime
+  stop        DateTime
+  title       String
+  description String?
+
+  @@index([channelId])
+  @@index([channelId, start])
+  @@index([start, stop])
+}
+
+model ChannelBufferPreference {
+  id            String   @id @default(cuid())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  channel       Channel  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channelId     String
+  bufferSeconds Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, channelId])
+  @@index([userId])
+}
+
+model Favorite {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  contentId   String
+  contentType ContentType
+  createdAt   DateTime    @default(now())
+
+  @@unique([userId, contentId, contentType])
+  @@index([userId])
+  @@index([contentId])
+}
+
+model WatchHistory {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  contentId   String
+  contentType ContentType
+  watchedAt   DateTime    @default(now())
+
+  @@unique([userId, contentId, contentType])
+  @@index([userId])
+  @@index([watchedAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, read])
+}
+
+model WatchProgress {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  movieId String?
+  movie   Movie?  @relation(fields: [movieId], references: [id], onDelete: SetNull)
+
+  seriesId String?
+  series   Series? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+
+  episodeId String?
+  episode   Episode? @relation(fields: [episodeId], references: [id], onDelete: SetNull)
+
+  timestamp Int // Progress in seconds
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([movieId])
+  @@index([episodeId])
+}
+
+// Video source configuration for auto-refresh
+model VideoSourceConfig {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g., "savefiles", "custom-cdn"
+  provider    String // SAVEFILES, CUSTOM, M3U8
+  apiKey      String? // Encrypted API key
+  apiEndpoint String? // API URL
+  isActive    Boolean  @default(true)
+  settings    String? // JSON for additional settings
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([provider])
+  @@index([isActive])
+}
+
+// Payment configuration
+model PaymentConfig {
+  id         String   @id @default(cuid())
+  provider   String   @unique // STRIPE, PRZELEWY24, PAYU, PAYPAL
+  apiKey     String? // Encrypted API key
+  apiSecret  String? // Encrypted secret
+  merchantId String? // Merchant/Seller ID
+  isTestMode Boolean  @default(true)
+  isActive   Boolean  @default(false)
+  settings   String? // JSON for additional settings
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([provider])
+  @@index([isActive])
+}
+
+// Payment transactions
+model Payment {
+  id             String        @id @default(cuid())
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  amount         Float // Amount (SQLite doesn't support Decimal)
+  currency       String        @default("PLN")
+  provider       String // STRIPE, PRZELEWY24, etc.
+  providerTxId   String?       @unique // Transaction ID from provider
+  status         PaymentStatus @default(PENDING)
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+  subscriptionId String?
+  metadata       String? // JSON for additional data
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([providerTxId])
+  @@index([createdAt])
+}
+
+// User profiles for personalization
+model UserProfile {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String   @unique
+  avatarUrl   String?
+  bio         String?
+  preferences String? // JSON for user preferences
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// Reviews and ratings
+model Review {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  contentId   String
+  contentType ContentType
+  rating      Float // 0-10
+  title       String?
+  content     String?
+  isSpoiler   Boolean     @default(false)
+  isApproved  Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  movie       Movie?      @relation(fields: [movieId], references: [id])
+  movieId     String?
+  series      Series?     @relation(fields: [seriesId], references: [id])
+  seriesId    String?
+
+  @@unique([userId, contentId, contentType])
+  @@index([userId])
+  @@index([contentId])
+  @@index([contentType])
+}
+
+// Tags for movies and series
+model Tag {
+  id        String      @id @default(cuid())
+  name      String      @unique
+  slug      String      @unique
+  movies    MovieTag[]
+  series    SeriesTag[]
+  createdAt DateTime    @default(now())
+
+  @@index([name])
+}
+
+model MovieTag {
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieId String
+  tag     Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId   String
+
+  @@id([movieId, tagId])
+}
+
+model SeriesTag {
+  series   Series @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  seriesId String
+  tag      Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId    String
+
+  @@id([seriesId, tagId])
+}
+
+// Subtitles
+model Subtitle {
+  id        String   @id @default(cuid())
+  movieId   String?
+  episodeId String?
+  language  String // e.g., "pl", "en", "de"
+  label     String // Display name
+  url       String // URL to .vtt/.srt file
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  episode   Episode? @relation(fields: [episodeId], references: [id])
+
+  @@index([movieId])
+  @@index([episodeId])
+  @@index([language])
+}
+
+// Watch party
+model WatchParty {
+  id           String                  @id @default(cuid())
+  host         User                    @relation("HostedParties", fields: [hostId], references: [id])
+  hostId       String
+  contentId    String
+  contentType  ContentType
+  name         String
+  isPublic     Boolean                 @default(false)
+  inviteCode   String                  @unique
+  maxViewers   Int                     @default(10)
+  isActive     Boolean                 @default(true)
+  startedAt    DateTime                @default(now())
+  endedAt      DateTime?
+  participants WatchPartyParticipant[]
+
+  @@index([hostId])
+  @@index([inviteCode])
+  @@index([isActive])
+}
+
+model WatchPartyParticipant {
+  id           String     @id @default(cuid())
+  watchParty   WatchParty @relation(fields: [watchPartyId], references: [id], onDelete: Cascade)
+  watchPartyId String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  joinedAt     DateTime   @default(now())
+  leftAt       DateTime?
+
+  @@unique([watchPartyId, userId])
+  @@index([watchPartyId])
+  @@index([userId])
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+// Renamed from FavoriteType to ContentType for clarity — used in Favorite, WatchHistory
+enum ContentType {
+  MOVIE
+  SERIES
+  EPISODE
+  CHANNEL
+}

@@ -1,0 +1,3 @@
+{
+  "/api/vouchers/bulk/route": "app/api/vouchers/bulk/route.js"
+}

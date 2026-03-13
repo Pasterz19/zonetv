@@ -1,0 +1,50 @@
+{
+  "node": {
+    "409d23f8355b4d8961d8e08c1610ebc07fa8348e00": {
+      "workers": {
+        "app/admin/e2-import/page": {
+          "moduleId": "[project]/.next-internal/server/app/admin/e2-import/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/admin/e2-import/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "importE2FromUrl",
+          "filename": "src/app/admin/e2-import/actions.ts"
+        }
+      },
+      "layer": {
+        "app/admin/e2-import/page": "action-browser"
+      },
+      "exportedName": "importE2FromUrl",
+      "filename": "src/app/admin/e2-import/actions.ts"
+    },
+    "40b9b4682ceeaf0867940ae95a0597ab0bbad65594": {
+      "workers": {
+        "app/admin/e2-import/page": {
+          "moduleId": "[project]/.next-internal/server/app/admin/e2-import/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/admin/e2-import/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "importE2Preset",
+          "filename": "src/app/admin/e2-import/actions.ts"
+        }
+      },
+      "layer": {
+        "app/admin/e2-import/page": "action-browser"
+      },
+      "exportedName": "importE2Preset",
+      "filename": "src/app/admin/e2-import/actions.ts"
+    },
+    "7f5d4604d3084ccc5136723a388ad77f427d4c4816": {
+      "workers": {
+        "app/admin/e2-import/page": {
+          "moduleId": "[project]/.next-internal/server/app/admin/e2-import/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/admin/e2-import/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "E2_PRESETS",
+          "filename": "src/app/admin/e2-import/actions.ts"
+        }
+      },
+      "layer": {
+        "app/admin/e2-import/page": "action-browser"
+      },
+      "exportedName": "E2_PRESETS",
+      "filename": "src/app/admin/e2-import/actions.ts"
+    }
+  },
+  "edge": {}
+}

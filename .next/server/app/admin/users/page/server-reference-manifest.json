@@ -1,0 +1,80 @@
+{
+  "node": {
+    "400b681a153ce4496f5753c704c082baf6674f2000": {
+      "workers": {
+        "app/admin/users/page": {
+          "moduleId": 71686,
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_4",
+          "filename": "src/app/admin/users/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/users/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_4",
+      "filename": "src/app/admin/users/page.tsx"
+    },
+    "402df7722d2e3be7b985ffff108bb25e5d6eaf9c68": {
+      "workers": {
+        "app/admin/users/page": {
+          "moduleId": 71686,
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_2",
+          "filename": "src/app/admin/users/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/users/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_2",
+      "filename": "src/app/admin/users/page.tsx"
+    },
+    "405bcbedfb3a0cfc12ebbf04f3a355255dafa59454": {
+      "workers": {
+        "app/admin/users/page": {
+          "moduleId": 71686,
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_3",
+          "filename": "src/app/admin/users/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/users/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_3",
+      "filename": "src/app/admin/users/page.tsx"
+    },
+    "4081623288d8b7945f337ccac18dd7ae8f90a30a2d": {
+      "workers": {
+        "app/admin/users/page": {
+          "moduleId": 71686,
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "src/app/admin/users/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/users/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "src/app/admin/users/page.tsx"
+    },
+    "40a53f65546de2d092f26e23d298480b462102eac4": {
+      "workers": {
+        "app/admin/users/page": {
+          "moduleId": 71686,
+          "async": true,
+          "exportedName": "$$RSC_SERVER_ACTION_1",
+          "filename": "src/app/admin/users/page.tsx"
+        }
+      },
+      "layer": {
+        "app/admin/users/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_1",
+      "filename": "src/app/admin/users/page.tsx"
+    }
+  },
+  "edge": {}
+}

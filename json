@@ -1,0 +1,134 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# 🚀 TEST POŁĄCZENIA Z COLAB\n",
+    "Ten notebook sprawdza połączenie z serwerami Google Colab i wyświetla informacje o środowisku."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import sys\n",
+    "import platform\n",
+    "import psutil\n",
+    "import subprocess\n",
+    "from datetime import datetime\n",
+    "\n",
+    "print(\"=\" * 60)\n",
+    "print(\"📡 INFORMACJE O POŁĄCZENIU\")\n",
+    "print(\"=\" * 60)\n",
+    "print(f\"Data i czas: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\")\n",
+    "print(f\"Python wersja: {sys.version}\")\n",
+    "print(f\"Platforma: {platform.system()} {platform.release()}\")\n",
+    "print(f\"Hostname: {platform.node()}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(\"\\n\" + \"=\" * 60)\n",
+    "print(\"💻 SPECYFIKACJA SERWERA\")\n",
+    "print(\"=\" * 60)\n",
+    "\n",
+    "# CPU\n",
+    "print(f\"CPU: {psutil.cpu_count()} rdzeni logicznych\")\n",
+    "print(f\"CPU freq: {psutil.cpu_freq().current:.0f} MHz\" if psutil.cpu_freq() else \"CPU freq: brak danych\")\n",
+    "\n",
+    "# RAM\n",
+    "ram = psutil.virtual_memory()\n",
+    "print(f\"RAM: {ram.total / 1024**3:.2f} GB\")\n",
+    "print(f\"RAM dostępne: {ram.available / 1024**3:.2f} GB\")\n",
+    "\n",
+    "# Dysk\n",
+    "disk = psutil.disk_usage('/')\n",
+    "print(f\"Dysk: {disk.total / 1024**3:.2f} GB\")\n",
+    "print(f\"Dysk wolne: {disk.free / 1024**3:.2f} GB\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(\"\\n\" + \"=\" * 60)\n",
+    "print(\"🎮 SPRAWDZANIE GPU\")\n",
+    "print(\"=\" * 60)\n",
+    "\n",
+    "try:\n",
+    "    gpu = subprocess.check_output(\n",
+    "        ['nvidia-smi', '--query-gpu=name,memory.total', '--format=csv,noheader'],\n",
+    "        text=True\n",
+    "    ).strip()\n",
+    "    if gpu:\n",
+    "        print(f\"✅ GPU: {gpu}\")\n",
+    "    else:\n",
+    "        print(\"❌ Brak GPU (tryb CPU)\")\n",
+    "except:\n",
+    "    print(\"❌ Brak GPU (tryb CPU)\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(\"\\n\" + \"=\" * 60)\n",
+    "print(\"⚡ TEST WYDAJNOŚCI\")\n",
+    "print(\"=\" * 60)\n",
+    "\n",
+    "import numpy as np\n",
+    "import time\n",
+    "\n",
+    "size = 3000\n",
+    "print(f\"Test: mnożenie macierzy {size}x{size}...\")\n",
+    "\n",
+    "start = time.time()\n",
+    "a = np.random.rand(size, size)\n",
+    "b = np.random.rand(size, size)\n",
+    "c = np.dot(a, b)\n",
+    "end = time.time()\n",
+    "\n",
+    "print(f\"✅ Czas: {end - start:.2f} sekund\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(\"\\n\" + \"=\" * 60)\n",
+    "print(\"✅ TEST ZAKOŃCZONY POMYŚLNIE\")\n",
+    "print(\"=\" * 60)\n",
+    "print(\"\\n📝 Podsumowanie:\")\n",
+    "print(\"• Połączenie z Colab działa\")\n",
+    "print(\"• Środowisko Python jest gotowe\")\n",
+    "print(\"• Możesz teraz uruchamiać swoje skrypty\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "name": "python",
+   "version": "3.10.12"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

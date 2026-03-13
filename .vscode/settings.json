@@ -1,0 +1,80 @@
+{
+  // ========================================
+  // ROO CODE - Główna konfiguracja z SiliconFlow
+  // ========================================
+  "roo-code.apiProvider": "OpenAI Compatible",
+  "roo-code.openaiCompatible.baseUrl": "https://api.siliconflow.cn/v1",
+  "roo-code.openaiCompatible.apiKey": "sk-olgochbhvlmmpwegnhdduaalphtkhmzvulfkxommcxoyjwgk",
+  "roo-code.model": "Qwen/Qwen2.5-Coder-32B-Instruct",
+  "roo-code.temperature": 0.3,
+  "roo-code.maxTokens": 4096,
+  "roo-code.enableCodeActions": true,
+  "roo-code.enableDiagnostics": true,
+
+  // ========================================
+  // PRISMA - Dla bazy danych
+  // ========================================
+  "[prisma]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "prisma.fileWatcher": true,
+
+  // ========================================
+  // TAILWIND CSS - Dla stylowania
+  // ========================================
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "javascript": "javascript",
+    "css": "css"
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+
+  // ========================================
+  // PRETTIER - Formatowanie kodu
+  // ========================================
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.requireConfig": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // ========================================
+  // OGÓLNE USTAWIENIA EDYTORA
+  // ========================================
+  "editor.inlineSuggest.enabled": true,
+  "editor.suggestSelection": "first",
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "workbench.startupEditor": "none",
+
+  // ========================================
+  // ERROR LENS - Błędy w linii
+  // ========================================
+  "errorLens.enabled": true,
+  "errorLens.fontStyleItalic": true,
+  "errorLens.maxProblems": 250,
+
+  // ========================================
+  // IMPORT COST - Rozmiar importów
+  // ========================================
+  "importCost.largePackageSize": 50,
+
+  // ========================================
+  // WYŁĄCZENIE KONFLIKTÓW
+  // ========================================
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false
+  }
+}

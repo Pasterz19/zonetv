@@ -1,0 +1,6 @@
+{
+    "colab.logging.level": "info",
+    "colab.serverMounting.enabled": true,
+    "colab.terminal.enabled": true,
+    "colab.uploading.enabled": true
+}

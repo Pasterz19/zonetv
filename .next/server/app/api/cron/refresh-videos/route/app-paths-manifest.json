@@ -1,0 +1,3 @@
+{
+  "/api/cron/refresh-videos/route": "app/api/cron/refresh-videos/route.js"
+}

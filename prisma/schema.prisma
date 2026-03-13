@@ -3,7 +3,7 @@
 
 generator client {
   provider   = "prisma-client"
-  // output moved to node_modules
+  output   = "../src/generated/prisma"
   engineType = "library"
 }
 

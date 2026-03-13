@@ -1,4 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
+const path = require('path');
+// Ładujemy Prisma bezpośrednio z folderu wygenerowanego w src
+const { PrismaClient } = require(path.join(process.cwd(), 'src', 'generated', 'prisma'));
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
@@ -13,7 +15,7 @@ async function importChannels() {
     console.log(`📥 Pobieranie: ${FILE_URL}`);
     
     const response = await fetch(FILE_URL, {
-        headers: { 'User-Agent': 'Mozilla/5.0' }
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
     });
 
     if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);

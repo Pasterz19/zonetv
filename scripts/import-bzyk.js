@@ -1,13 +1,11 @@
-const path = require('path');
-// Ładujemy Prisma bezpośrednio z folderu wygenerowanego w src
-const { PrismaClient } = require(path.join(process.cwd(), 'src', 'generated', 'prisma'));
+const { PrismaClient } = require('@prisma/client');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
 const prisma = new PrismaClient();
 
 async function importChannels() {
-  console.log('🚀 Rozpoczynam import kanałów...');
+  console.log('🚀 Rozpoczynam import kanałów (Bzyk83)...');
 
   const FILE_URL = 'https://enigma2.hswg.pl/listy-kanalow-e2-by-bzyk83/userbouquet.dvb-s.bzyk83__polsat.tv';
 

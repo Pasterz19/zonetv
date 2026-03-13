@@ -1,13 +1,16 @@
-import { PrismaClient } from '../src/generated/prisma'; // POPRAWIONA ŚCIEŻKA (zgodna z Twoim logiem generate)
+// Dynamincze ładowanie Prisma z głównej ścieżki projektu
+import { PrismaClient } from '@prisma/client';
 import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
 
-const prisma = new PrismaClient();
+// Wymuszamy użycie wygenerowanego klienta z konkretnego folderu
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { PrismaClient: PrismaClientLocal } = require(`${process.cwd()}/src/generated/prisma`);
+const prisma = new PrismaClientLocal();
 
 async function importChannels() {
   console.log('🚀 Rozpoczynam import kanałów z listy Bzyk83...');
 
-  // Bezpośredni link do pliku z listą kanałów (Polsat)
   const FILE_URL = 'https://enigma2.hswg.pl/listy-kanalow-e2-by-bzyk83/userbouquet.dvb-s.bzyk83__polsat.tv';
 
   try {
@@ -36,10 +39,7 @@ async function importChannels() {
         if (line.startsWith('#SERVICE')) {
             const parts = line.split(':');
             
-            // Sprawdzamy czy to kanał TV (1:0:1)
             if (parts.length > 1 && parts[1] === '0' && parts[2] === '1') {
-                
-                // Pobieramy nazwę z kolejnej linii
                 let name = `Channel_${i}`;
                 const nextLine = lines[i + 1]?.trim();
                 
@@ -58,7 +58,7 @@ async function importChannels() {
                         create: {
                             name: name,
                             url: `enigma_ref:${line.split('#SERVICE: ')[1]}`,
-                            logo: `https://logo.example.com/${name.toLowerCase().replace(/\s/g, '')}.png`,
+                            logo: `https://via.placeholder.com/150?text=${name}`,
                             category: 'Polsat Bzyk Import',
                             epgId: name.toLowerCase().replace(/\s/g, '-'),
                             isActive: true,

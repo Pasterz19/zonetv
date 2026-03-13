@@ -1,0 +1,37 @@
+name: Auto Pack Extension
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # --- TO JEST KLUCZOWE DLA TWOJEGO PROJEKTU ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+      # -------------------------------------------
+
+      # Ważne: Tutaj musisz podać nazwę folderu, w którym powstał gotowy projekt.
+      # Zazwyczaj jest to folder 'dist' lub 'build'. Sprawdź to w swoim projekcie!
+      - name: Create ZIP artifact
+        run: zip -r zonetv-extension.zip dist/  # <--- ZMIEŃ 'dist' na swój folder wynikowy!
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zonetv-extension-package
+          path: zonetv-extension.zip
